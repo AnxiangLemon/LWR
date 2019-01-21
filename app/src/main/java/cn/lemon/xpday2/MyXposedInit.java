@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 
-import cn.lemon.xpday2.thread.Tuling123;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -236,8 +235,8 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         * */
 
 
-        //目前用这个状态表示好友发来的消息
-        if (status == 3) {
+        //目前用这个状态表示好友发来的消息  pc电脑端发送status=3 但是isSend=0
+        if (status == 3 && isSend != 1) {
 
             if (talker.endsWith("@chatroom")) {
                 //群消息

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.lemon.xpday2" >
+    package="cn.lemon.lwr" >
     <!-- 网络权限申请 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -21,7 +21,7 @@
             android:name="xposedminversion"
             android:value="82" />
 
-        <activity android:name=".MainActivity" >
+        <activity android:name="cn.lemon.lwr.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

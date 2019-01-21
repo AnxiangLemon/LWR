@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.lemon.xpday2"
+    package="cn.lemon.lwr"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -30,7 +30,7 @@
             android:name="xposedminversion"
             android:value="82" />
 
-        <activity android:name="cn.lemon.xpday2.MainActivity" >
+        <activity android:name="cn.lemon.lwr.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,10 +1,12 @@
 package cn.lemon.xpday2;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -22,7 +24,7 @@ public class MyXposedInit implements IXposedHookLoadPackage {
     private static final String WECHAT_PROCESS_NAME = "com.tencent.mm";
 
     //类加载器
-    private static ClassLoader xpClassLoader  = null;
+    private static ClassLoader xpClassLoader = null;
 
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         //region hook模块是否激活
@@ -48,12 +50,99 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         }
         XposedBridge.log("进入微信进程：" + lpparam.processName);
         //调用 hook数据库插入。
-       hookDatabaseInsert(lpparam);
-        hookChatErCode(lpparam);
+         hookDatabaseInsert(lpparam);
+        listenerimg(lpparam);
+        //listenerimg2();
+        //  hookChatQrCode(lpparam);
+
+    }
+
+    private void listenerimg2(){
+        Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.ui.chatting.SendImgProxyUI", xpClassLoader);
+        if (sclass==null)return;
+
+
+        XposedHelpers.findAndHookMethod(sclass, "a", ArrayList.class, int.class,ArrayList.class, boolean.class, new XC_MethodHook() {
+            @Override
+            protected void  afterHookedMethod(MethodHookParam param) throws Throwable {
+                ArrayList<String> paramArrayList = (ArrayList<String>) param.args[0];
+                boolean paramBoolean = (boolean) param.args[3];
+                ArrayList<String> paramArrayList2= (ArrayList<String>) param.args[2];
+                int paramInt= (int) param.args[1];
+
+
+                XposedBridge.log("代理list--" + paramArrayList.toString() + "" +
+                        "--" + paramBoolean +
+                        "--" + paramInt +
+                        "--" +  paramArrayList.toString()+
+                        "---"+(param.getResult()==null?param.getResult():param.getResult().toString()));
+
+            }
+        });
+
+    }
+
+    private void listenerimg(final XC_LoadPackage.LoadPackageParam lpparam){
+        Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.n", lpparam.classLoader);
+        if (sclass==null)return;
+
+        XposedHelpers.findAndHookMethod(sclass, "a", ArrayList.class, boolean.class, int.class, int.class, String.class, int.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                ArrayList<String> paramArrayList = (ArrayList<String>) param.args[0];
+                boolean paramBoolean = (boolean) param.args[1];
+                int paramInt1 = (int) param.args[2];
+                int paramInt2 = (int) param.args[3];
+                String paramString = (String) param.args[4];
+                int paramInt3 = (int) param.args[5];
+
+                XposedBridge.log("HOOK发送图片--" + paramArrayList.toString() + "" +
+                        "--" + paramBoolean +
+                        "--" + paramInt1 +
+                        "--" + paramInt2 +
+                        "--" + paramString +
+                        "--" + paramInt3);
+
+            }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Log.d("堆栈","测试过会==============");
+                new Exception().printStackTrace(); // 直接干脆
+            }
+        });
+    }
+
+    private void hookChatImgMsg() {
+        Class<?> sclass = XposedHelpers.findClass("com.tencent.mm.as.n", xpClassLoader);
+        if (sclass==null){
+            XposedBridge.log("未加载类");
+            return;
+        }
+        //    Class<?> classG = XposedHelpers.findClassIfExists("com.tencent.mm.kernel.g", xpClassLoader);
+           Object objectG = XposedHelpers.callStaticMethod(sclass, "abu");
+            Object objectdpP = XposedHelpers.getObjectField(objectG, "fkO");
+
+            Method methodA = XposedHelpers.findMethodExact(sclass, "a", ArrayList.class, boolean.class, int.class, int.class, String.class, int.class);
+
+            ArrayList<String>arrayList = new ArrayList<>();
+            arrayList.add("/storage/emulated/0/launcher/ad/f807c5c11a42152c3d474409efedb98b.png");
+
+            Object[]obj = new Object[]{arrayList,true,0,0,"wxid_psn4vfy4kfr822",2130838195};
+
+            try {
+                //发送消息
+                XposedBridge.invokeOriginalMethod(methodA, objectdpP, obj);
+                XposedBridge.log("发送图片消息？？");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
     }
 
 
+    /*发送二维码信息*/
     public static void sendQrCodeMsg() {
         /*
          * 这个是获取发送消息的静态类对象
@@ -66,7 +155,7 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
         Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.plugin.collect.b.s", xpClassLoader);
 
-        Object hp = XposedHelpers.newInstance(sclass, new Class[]{ double.class, String.class, String.class},11,"0","跟发送消息一个fun");
+        Object hp = XposedHelpers.newInstance(sclass, new Class[]{double.class, String.class, String.class}, 11, "0", "跟发送消息一个fun");
         Object[] hpobj = new Object[]{hp, 0};
 
         //获取微信发消息类
@@ -85,40 +174,40 @@ public class MyXposedInit implements IXposedHookLoadPackage {
     }
 
 
-        private void hookChatErCode(final  XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookChatQrCode(final XC_LoadPackage.LoadPackageParam lpparam) {
         Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.plugin.collect.b.s", lpparam.classLoader);
         if (sclass == null) {
             return;
         } else {
 
             //(double paramDouble, String paramString1, String paramString2)
-          XposedHelpers.findAndHookConstructor(sclass, double.class, String.class, String.class, new XC_MethodHook() {
-              @Override
-              protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                  double fee = (double) param.args[0];
-                  String fee_type = (String) param.args[1];
-                  String desc = (String) param.args[2];
-                  XposedBridge.log(fee+"--"+fee_type+"--"+desc);
-              }
-          });
+            XposedHelpers.findAndHookConstructor(sclass, double.class, String.class, String.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    double fee = (double) param.args[0];
+                    String fee_type = (String) param.args[1];
+                    String desc = (String) param.args[2];
+                    XposedBridge.log(fee + "--" + fee_type + "--" + desc);
+                }
+            });
 
-          XposedHelpers.findAndHookMethod(sclass,"a",int.class,String.class,JSONObject.class,new XC_MethodHook() {
-              @Override
-              protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                 int i1 = (int) param.args[0];
-                 String s1 = (java.lang.String) param.args[1];
-                 JSONObject jsonObject = (JSONObject) param.args[2];
+            XposedHelpers.findAndHookMethod(sclass, "a", int.class, String.class, JSONObject.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    int i1 = (int) param.args[0];
+                    String s1 = (java.lang.String) param.args[1];
+                    JSONObject jsonObject = (JSONObject) param.args[2];
 
 
-                 XposedBridge.log(i1+"--" +
-                         s1+"--"+
-                         jsonObject.toString()
-                         );
-                  //微信二维码链接
-                  String pay_url =  jsonObject.getString("pay_url");
+                    XposedBridge.log(i1 + "--" +
+                            s1 + "--" +
+                            jsonObject.toString()
+                    );
+                    //微信二维码链接
+                    String pay_url = jsonObject.getString("pay_url");
 
-              }
-          });
+                }
+            });
 
         }
     }
@@ -153,9 +242,8 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 //    }
 
 
-
     //hook数据库插入操作
-    private void hookDatabaseInsert(final  XC_LoadPackage.LoadPackageParam lpparam) {
+    private void hookDatabaseInsert(final XC_LoadPackage.LoadPackageParam lpparam) {
         Class<?> classDb = XposedHelpers.findClassIfExists(WECHAT_DATABASE_PACKAGE_NAME, lpparam.classLoader);
         if (classDb == null) {
             return;
@@ -238,25 +326,25 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         //目前用这个状态表示好友发来的消息  pc电脑端发送status=3 但是isSend=0
         if (status == 3 && isSend != 1) {
 
-            if (talker.endsWith("@chatroom")) {
-                //群消息
+            if (talker.equals("weixin")) { //系统账号发来的消息
 
-            } else if (talker.startsWith("gh_")) {
-                //公众号消息
+            } else if (talker.endsWith("@chatroom")) {   //群消息
 
-            } else {
-                sendQrCodeMsg();
-            //    Tuling123 tuling123 = new Tuling123(talker,content);
-           //     tuling123.run();
-                //好友消息
-              //  sendTextMsg(talker, content);
+
+            } else if (talker.startsWith("gh_")) { //公众号消息
+
+
+            } else {  //好友消息
+                //  sendQrCodeMsg();
+                //    Tuling123 tuling123 = new Tuling123(talker,content);
+                //     tuling123.run();
+                hookChatImgMsg();
+               // sendTextMsg(talker, content);
             }
 
 
         }
     }
-
-
 
 
     /*
@@ -293,5 +381,6 @@ public class MyXposedInit implements IXposedHookLoadPackage {
             e.printStackTrace();
         }
     }
+
 
 }

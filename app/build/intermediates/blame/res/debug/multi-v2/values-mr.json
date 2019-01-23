@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "D:\\AnxiangLemon\\soft\\Hook\\LWR\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
+            "outputFile": "E:\\AndroidHOOK\\LWR\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-mr\\values-mr.xml",
             "map": [
                 {
-                    "source": "D:\\Android Studio\\gradle\\gradle-4.6\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0-rc01.aar\\cbaf1181a219d907e07f0146f58e61e2\\res\\values-mr\\values-mr.xml",
+                    "source": "C:\\Users\\AnxiangLemon\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0-rc01.aar\\da351be0e8c079c8b922411dbf49f904\\res\\values-mr\\values-mr.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "D:\\Android Studio\\gradle\\gradle-4.6\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0-rc01.aar\\b9a1bc11e87cd8cb0b26bb1f2421b610\\res\\values-mr\\values-mr.xml",
+                    "source": "C:\\Users\\AnxiangLemon\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-28.0.0-rc01.aar\\965cde2bdfec3747c234950358404d68\\res\\values-mr\\values-mr.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

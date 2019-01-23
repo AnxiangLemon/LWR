@@ -1,15 +1,15 @@
 #Internal package file, do not edit.
-#Tue Jan 22 10:10:05 CST 2019
-1.base=D\:\\AnxiangLemon\\soft\\Hook\\LWR\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1
-2.path=classes.dex
+#Thu Jan 24 00:09:03 CST 2019
+1.base=E\:\\AndroidHOOK\\LWR\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+2.path=xposed_init
 0.baseType=DIRECTORY
-2.base=D\:\\AnxiangLemon\\soft\\Hook\\LWR\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
-2.set=DEX
+2.base=E\:\\AndroidHOOK\\LWR\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+2.set=ASSET
 1.baseType=DIRECTORY
 count=3
 1.set=DEX
-0.path=xposed_init
-0.set=ASSET
-0.base=D\:\\AnxiangLemon\\soft\\Hook\\LWR\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+0.path=classes.dex
+0.set=DEX
+0.base=E\:\\AndroidHOOK\\LWR\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1
 2.baseType=DIRECTORY
 1.path=classes.dex

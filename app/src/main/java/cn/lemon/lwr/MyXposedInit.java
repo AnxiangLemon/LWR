@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.lemon.lwr.util.ClassUtil;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -61,41 +62,7 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
     }
 
-    public static Map<String, Object> getKeyAndValue(Object obj) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        // 得到类对象
-        Class userCla = (Class) obj.getClass();
-        /* 得到类中的所有属性集合 */
-        Field[] fs = userCla.getDeclaredFields();
-        for (int i = 0; i < fs.length; i++) {
-            Field f = fs[i];
-            f.setAccessible(true); // 设置些属性是可以访问的
-            Object val = new Object();
-            try {
-                val = f.get(obj);
-                // 得到此属性的值
-                map.put(f.getName(), val);// 设置键值
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
 
-            /*
-             * String type = f.getType().toString();//得到此属性的类型 if
-             * (type.endsWith("String")) {
-             * System.out.println(f.getType()+"\t是String"); f.set(obj,"12") ;
-             * //给属性设值 }else if(type.endsWith("int") ||
-             * type.endsWith("Integer")){
-             * System.out.println(f.getType()+"\t是int"); f.set(obj,12) ; //给属性设值
-             * }else{ System.out.println(f.getType()+"\t"); }
-             */
-
-        }
-        System.out.println("单个对象的所有键值==反射==" + map.toString());
-
-        return map;
-    }
 
 
     private void listenerimg3(){
@@ -114,6 +81,8 @@ public class MyXposedInit implements IXposedHookLoadPackage {
             }
         });
 
+
+
         Class<?> abclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.l", xpClassLoader);
         if (abclass==null)return;
         Class<?>eclass = XposedHelpers.findClass("com.tencent.mm.as.e", xpClassLoader);
@@ -124,12 +93,39 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
             int p2= (int) param.args[1];
 
-            XposedBridge.log("上传图片.a()--" +getKeyAndValue(param.args[0]).toString()+"----"+p2);
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            XposedBridge.log("上传图片.a()--" + ClassUtil.getKeyAndValue(param.args[0]).toString()+"----"+p2);
 
         }
         });
 
+        //
+        Class<?> pclass = XposedHelpers.findClass("com.tencent.mm.ah.p", xpClassLoader);
+        Class<?> mClass = XposedHelpers.findClass("com.tencent.mm.ah.m", xpClassLoader);
+        XposedHelpers.findAndHookMethod(pclass, "a", mClass, int.class, new XC_MethodHook() {@Override
+        protected void  beforeHookedMethod(MethodHookParam param) throws Throwable {
 
+            int p2= (int) param.args[1];
+            Map<String, Object> map1 = new HashMap<String, Object>();
+            Map<String, Object>map = ClassUtil.getKeyAndValue(param.args[0],5,map1);
+            XposedBridge.log("监听发送消息.a()--" + map.toString()+"----"+p2);
+//            if(map.get("eZc")!=null){
+//                XposedBridge.log("二次解析.a()--" +ClassUtil.getKeyAndValue(map.get("eZc")).toString());
+//            }
+
+        }
+        });
+
+        Class<?> bclass = XposedHelpers.findClass("com.tencent.mm.plugin.ae.a.b", xpClassLoader);
+
+        XposedHelpers.findAndHookMethod(bclass, "bTn", new XC_MethodHook() {@Override
+        protected void  beforeHookedMethod(MethodHookParam param) throws Throwable {
+
+
+            XposedBridge.log("DTN执行了！");
+
+        }
+        });
 
     }
 
@@ -171,6 +167,15 @@ public class MyXposedInit implements IXposedHookLoadPackage {
                 XposedBridge.log("afl()--执行" );
             }
         });
+        XposedHelpers.findAndHookMethod(sclass, "finish",new XC_MethodHook() {
+            @Override
+            protected void  beforeHookedMethod(MethodHookParam param) throws Throwable {
+
+                XposedBridge.log("finish()--执行" );
+            }
+        });
+
+
 
     }
 
@@ -242,7 +247,8 @@ public class MyXposedInit implements IXposedHookLoadPackage {
            Object objectabu = XposedHelpers.callStaticMethod(sclass, "abu");
           // sclass.newInstance();
 
-         //   Object objectdpP = XposedHelpers.getObjectField(objectG, "fkO");
+
+        //   Object objectdpP = XposedHelpers.getObjectField(objectG, "fkO");
 
          //   Method methodA = XposedHelpers.findMethodExact(sclass, "a", ArrayList.class, boolean.class, int.class, int.class, String.class, int.class);
         //  Method methodB = XposedHelpers.findMethodExact(sclass, "nH", String.class);
@@ -273,11 +279,17 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
                     XposedHelpers.callStaticMethod(uiclass, "aFl");
 
+                  //  SendImgProxyUI.this.finish();
+
                     //   i(n.abu().nH(stringExtra), arrayList); (ArrayList<Integer>) XposedBridge.invokeOriginalMethod(methodB, objectdpP, new Object[]{"wxid_psn4vfy4kfr822"});
                    ArrayList<Integer> nhlist =  (ArrayList<Integer>) XposedHelpers.callMethod(objectabu, "nH","wxid_psn4vfy4kfr822");
              //    XposedHelpers.callMethod(objectG, "nH","wxid_psn4vfy4kfr822");
                //     XposedBridge.log("nhlist"+nhlist.toString());
             //      XposedHelpers.callStaticMethod(uiclass, "i",nhlist,picList);
+
+                    Object uiobject =  uiclass.newInstance();
+                    XposedBridge.log(uiobject+"--");
+                    XposedHelpers.callMethod(uiobject,"finish");
 
                 }
             } catch (Exception e) {

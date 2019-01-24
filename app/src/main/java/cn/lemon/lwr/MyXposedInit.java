@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.lemon.lwr.components.WxConfig;
 import cn.lemon.lwr.util.ClassUtil;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -19,8 +20,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class MyXposedInit implements IXposedHookLoadPackage {
-    //微信数据库包名称
-    private static final String WECHAT_DATABASE_PACKAGE_NAME = "com.tencent.wcdb.database.SQLiteDatabase";
+
     //聊天精灵客户端包名称
     private static final String WECHATGENIUS_PACKAGE_NAME = "cn.lemon.lwr";
     //微信主进程名
@@ -57,11 +57,10 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         hookDatabaseInsert(lpparam);
         listenerimg(lpparam);
         listenerimg2();
-        listenerimg3();
+       listenerimg3();
         //  hookChatQrCode(lpparam);
 
     }
-
 
 
     private void listenerimg3() {
@@ -71,7 +70,7 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         //此方法应该是（逆向还不是靠猜）返回文件上传路径
         XposedHelpers.findAndHookMethod(sclass, "a", String.class, long.class, String.class, String.class, new XC_MethodHook() {
             @Override
-            protected void  beforeHookedMethod(MethodHookParam param) throws Throwable {
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 String p1 = (String) param.args[0];
                 long p2 = (long) param.args[1];
                 String p3 = (String) param.args[2];
@@ -89,19 +88,19 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         if (pidclass == null) return;
         Class<?> leclass = XposedHelpers.findClassIfExists("com.tencent.mm.network.q", xpClassLoader);
         //欲问青天这人生有几何  浊酒一杯
-        XposedHelpers.findAndHookMethod(pidclass, "a", int.class, int.class,int.class,
-                String.class,leclass,byte[].class,new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                int p1 = (int) param.args[0];
-                int p2 = (int) param.args[1];
-                int p3 = (int) param.args[2];
-                String p4 = (String) param.args[3];
-                Object p5 =  param.args[1];
-                byte[] p6 = (byte[]) param.args[1];
-                XposedBridge.log("余生不悲不喜as.l.a()--" + p1+"--"+ p2+"--"+ p3+"--"+ p4+"--"+ClassUtil.getKeyAndValue( p5)+"--"+ p6.length);
-            }
-        });
+        XposedHelpers.findAndHookMethod(pidclass, "a", int.class, int.class, int.class,
+                String.class, leclass, byte[].class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        int p1 = (int) param.args[0];
+                        int p2 = (int) param.args[1];
+                        int p3 = (int) param.args[2];
+                        String p4 = (String) param.args[3];
+                        Object p5 = param.args[1];
+                        byte[] p6 = (byte[]) param.args[1];
+                        XposedBridge.log("余生不悲不喜as.l.a()--" + p1 + "--" + p2 + "--" + p3 + "--" + p4 + "--" + ClassUtil.getKeyAndValue(p5) + "--" + p6.length);
+                    }
+                });
 
 
         Class<?> abclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.l", xpClassLoader);
@@ -127,8 +126,8 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
 
                 Map<String, Object> map1 = new HashMap<String, Object>();
-                XposedBridge.log("上传图片参数一.a()"+param.args[0]+"--" + ClassUtil.getKeyAndValue(param.args[0]).toString() );
-                XposedBridge.log("上传图片参数二.a()"+param.args[0]+"--" + ClassUtil.getKeyAndValue(param.args[1]).toString());
+                XposedBridge.log("上传图片参数一.a()" + param.args[0] + "--" + ClassUtil.getKeyAndValue(param.args[0]).toString());
+                XposedBridge.log("上传图片参数二.a()" + param.args[0] + "--" + ClassUtil.getKeyAndValue(param.args[1]).toString());
 
 
             }
@@ -157,7 +156,6 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 //                XposedBridge.log("p$5class.run方法执行了()---"+param.thisObject.toString());
 //            }
 //        });
-
 
 
     }
@@ -233,32 +231,32 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         });
 
 
-        XposedHelpers.findAndHookMethod( asiclass, "a", ArrayList.class,String.class,String.class,
-                ArrayList.class, int.class,boolean.class, int.class, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                ArrayList<Integer> paramArrayList = (ArrayList<Integer>) param.args[0];
-                String paramString = (String) param.args[1];
-                String paramString2 = (String) param.args[2];
-                ArrayList<String> paramArrayList2 = (ArrayList<String>) param.args[3];
-                int paramInt1 = (int) param.args[4];
-                boolean paramBoolean = (boolean) param.args[5];
-                int paramInt2 = (int) param.args[6];
+        XposedHelpers.findAndHookMethod(asiclass, "a", ArrayList.class, String.class, String.class,
+                ArrayList.class, int.class, boolean.class, int.class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        ArrayList<Integer> paramArrayList = (ArrayList<Integer>) param.args[0];
+                        String paramString = (String) param.args[1];
+                        String paramString2 = (String) param.args[2];
+                        ArrayList<String> paramArrayList2 = (ArrayList<String>) param.args[3];
+                        int paramInt1 = (int) param.args[4];
+                        boolean paramBoolean = (boolean) param.args[5];
+                        int paramInt2 = (int) param.args[6];
 
 
-                XposedBridge.log("我要看看这个方法--" + paramArrayList.toString() + "" +
+                        XposedBridge.log("我要看看这个方法--" + paramArrayList.toString() + "" +
                                 "--" + paramString +
-                                "--" +paramString2+
-                        "--" + paramArrayList2.toString() +
-                        "--" + paramInt1 +
-                        "--" + paramBoolean +
-                        "--" + paramInt2
-                      );
+                                "--" + paramString2 +
+                                "--" + paramArrayList2.toString() +
+                                "--" + paramInt1 +
+                                "--" + paramBoolean +
+                                "--" + paramInt2
+                        );
 
-            }
+                    }
 
 
-        });
+                });
 
         XposedHelpers.findAndHookMethod(sclass, "nH", String.class, new XC_MethodHook() {
             @Override
@@ -276,83 +274,66 @@ public class MyXposedInit implements IXposedHookLoadPackage {
     }
 
     private void hookChatImgMsg() {
+        //微信发送图片的类
         Class<?> sclass = XposedHelpers.findClass("com.tencent.mm.as.n", xpClassLoader);
+        //发送图片代理类
         Class<?> uiclass = XposedHelpers.findClass("com.tencent.mm.ui.chatting.SendImgProxyUI", xpClassLoader);
 
-        Class<?> b$1class = XposedHelpers.findClass("com.tencent.mm.plugin.ae.a.b", xpClassLoader);
+        //Class<?> b$1class = XposedHelpers.findClass("com.tencent.mm.plugin.ae.a.b", xpClassLoader);
+        //上传图片的类
+        Class<?> iclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.i", xpClassLoader);
 
 
         if (sclass == null) {
             XposedBridge.log("未成功加载类！");
             return;
         }
+        //构造微信图片数组
         ArrayList<String> picList = new ArrayList<>();
         picList.add("/storage/emulated/0/launcher/ad/f807c5c11a42152c3d474409efedb98b.png");
 
-        XposedHelpers.setStaticBooleanField(uiclass, "isRunning", true);
+        //设置属性为true  好像是防止会有重复的实例
+        //  XposedHelpers.setStaticBooleanField(uiclass, "isRunning", true);
 
-        ArrayList<String> picList2 = new ArrayList<>();
-        //read读取函数执行
-        //  XposedHelpers.findAndHookMethod(sclass, "a", ArrayList.class, int.class,ArrayList.class, boolean.class, new XC_MethodHook() {
-        ArrayList<String> readlist = (ArrayList) XposedHelpers.callStaticMethod(uiclass, "a", picList, 26214400, picList2, true);
+        //read读取函数执行   貌似是检查图片合法性
+//        ArrayList<String> picList2 = new ArrayList<>();
+//        ArrayList<String> readlist = (ArrayList) XposedHelpers.callStaticMethod(uiclass, "a", picList, 26214400, picList2, true);
 
         //执行静态方法获取类  获取属性 即为对象实例
         Object objectabu = XposedHelpers.callStaticMethod(sclass, "abu");
-        // sclass.newInstance();
 
 
-        //   Object objectdpP = XposedHelpers.getObjectField(objectG, "fkO");
-
-        //   Method methodA = XposedHelpers.findMethodExact(sclass, "a", ArrayList.class, boolean.class, int.class, int.class, String.class, int.class);
-        //  Method methodB = XposedHelpers.findMethodExact(sclass, "nH", String.class);
-
-
-        //   Object[]obj = new Object[]{picList,true,0,0,"wxid_psn4vfy4kfr822",2130838195};
-        Class<?> classG = XposedHelpers.findClassIfExists("com.tencent.mm.kernel.g", xpClassLoader);
-        Object objectMK = XposedHelpers.callStaticMethod(classG, "MK");
+        // Class<?> classG = XposedHelpers.findClassIfExists("com.tencent.mm.kernel.g", xpClassLoader);
+        //Object objectMK = XposedHelpers.callStaticMethod(classG, "MK");
+        //     XposedHelpers.callMethod(objectMK, "dbI");
 
         try {
-            //       Message message = new Message();
-            //    message.
-
-            //           Bundle paramBundle =  message.getData();
-            //             paramBundle.toString();
-//                Object uiobj = uiclass.newInstance();
-//                XposedHelpers.callMethod( uiobj, "onCreate",paramBundle);
 
             if (picList.size() > 0) {
-
-
-
-                        //发送消息
-           //     XposedHelpers.callMethod(objectMK, "dbI");
-
-
-                XposedHelpers.callMethod(objectabu, "a", picList, true, 0, 0, "wxid_psn4vfy4kfr822", 2130838195);
+                //执行发送方法  true是压缩  false发送原图  默然true
+                XposedHelpers.callMethod(objectabu, "a", picList, false, 0, 0, "wxid_psn4vfy4kfr822", 2130838195);
                 //    XposedBridge.invokeOriginalMethod(methodA, objectG, obj);
                 //然后执行另一个方法 应该是校验的
 
-            //    XposedHelpers.callMethod(objectMK, "dbJ");
+                //    XposedHelpers.callMethod(objectMK, "dbJ");
 
-         //       XposedHelpers.callStaticMethod(uiclass, "aFl");
+                //这个是加入队列的
+                XposedHelpers.callStaticMethod(uiclass, "aFl");
 
+                //获取发送的集合 上传需要
                 ArrayList<Integer> nhlist = (ArrayList<Integer>) XposedHelpers.callMethod(objectabu, "nH", "wxid_psn4vfy4kfr822");
+             //   XposedBridge.log("nhlist" + nhlist.toString());
 
-
-                //   i(n.abu().nH(stringExtra), arrayList); (ArrayList<Integer>) XposedBridge.invokeOriginalMethod(methodB, objectdpP, new Object[]{"wxid_psn4vfy4kfr822"});
-                  //    XposedHelpers.callMethod(objectG, "nH","wxid_psn4vfy4kfr822");
-                //     XposedBridge.log("nhlist"+nhlist.toString());
-                //      XposedHelpers.callStaticMethod(uiclass, "i",nhlist,picList);
-
-                //Object b1obj = b$1class.newInstance();
-             //   XposedHelpers.callMethod(b1obj , "bTn");
-
+                /// [50]--wxid_4b9a1yqz3s0322--wxid_psn4vfy4kfr822--[/storage/emulated/0/launcher/ad/1244800853378a628796e134a886c043.png]--0--true--2130838195
+                Object iobj = iclass.newInstance();
+              //  XposedBridge.log("--上传线程运行-" + iobj);
+                XposedHelpers.callMethod(iobj, "a", nhlist, "wxid_4b9a1yqz3s0322", "wxid_psn4vfy4kfr822", picList, 0, false, 2130838195);
 
 
             }
         } catch (Exception e) {
             e.printStackTrace();
-            XposedBridge.log("异常："+e.getMessage());
+            XposedBridge.log("发送图片异常信息：" + e.getMessage());
         }
 
 
@@ -391,6 +372,7 @@ public class MyXposedInit implements IXposedHookLoadPackage {
     }
 
 
+    //获取二维码信息
     private void hookChatQrCode(final XC_LoadPackage.LoadPackageParam lpparam) {
         Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.plugin.collect.b.s", lpparam.classLoader);
         if (sclass == null) {
@@ -461,12 +443,12 @@ public class MyXposedInit implements IXposedHookLoadPackage {
 
     //hook数据库插入操作
     private void hookDatabaseInsert(final XC_LoadPackage.LoadPackageParam lpparam) {
-        Class<?> classDb = XposedHelpers.findClassIfExists(WECHAT_DATABASE_PACKAGE_NAME, lpparam.classLoader);
+        Class<?> classDb = XposedHelpers.findClassIfExists(WxConfig.DATABASE_PACKAGE_NAME, lpparam.classLoader);
         if (classDb == null) {
             return;
         } else {
             XposedHelpers.findAndHookMethod(classDb,
-                    "insertWithOnConflict",
+                    WxConfig.DATABASE_HOOKFUN,
                     String.class, String.class, ContentValues.class, int.class,
                     new XC_MethodHook() {
                         @Override

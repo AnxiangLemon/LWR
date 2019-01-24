@@ -36,7 +36,7 @@ public class ClassUtil {
 
 
         }
-        System.out.println("单个对象的所有键值==反射==" + map.toString());
+        System.out.println(obj.toString()+"单个对象的所有键值==反射==" + map.toString());
 
         return map;
     }

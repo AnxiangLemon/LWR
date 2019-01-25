@@ -19,9 +19,6 @@ public final class AppInfo {
     //判断微信版本是否符合要求
     private boolean mIsWechatVer;
 
-
-
-
     //region 单例
     //单例
     private static volatile AppInfo mInstance = null;

@@ -1,0 +1,210 @@
+   
+
+   //监听发送图片的  暂时先留着 毕竟还要发送网络图片的到时候也好调试
+    private void listenerimg3() {
+        Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.ak.c", xpClassLoader);
+        if (sclass == null) return;
+
+        //此方法应该是（逆向还不是靠猜）返回文件上传路径
+        XposedHelpers.findAndHookMethod(sclass, "a", String.class, long.class, String.class, String.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                String p1 = (String) param.args[0];
+                long p2 = (long) param.args[1];
+                String p3 = (String) param.args[2];
+                String p4 = (String) param.args[3];
+                log("ak.c.a()--" + p1 + "--" + p2 + "--" + p3 + "--" + p4 + "--");
+
+                Log.d("堆栈", "测试过会============== + param.getResult()");
+                new Exception().printStackTrace(); // 直接干脆
+
+
+            }
+        });
+
+        Class<?> pidclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.l", xpClassLoader);
+        if (pidclass == null) return;
+        Class<?> leclass = XposedHelpers.findClassIfExists("com.tencent.mm.network.q", xpClassLoader);
+        //欲问青天这人生有几何  浊酒一杯
+        XposedHelpers.findAndHookMethod(pidclass, "a", int.class, int.class, int.class,
+                String.class, leclass, byte[].class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        int p1 = (int) param.args[0];
+                        int p2 = (int) param.args[1];
+                        int p3 = (int) param.args[2];
+                        String p4 = (String) param.args[3];
+                        Object p5 = param.args[1];
+                        byte[] p6 = (byte[]) param.args[1];
+                        log("余生不悲不喜as.l.a()--" + p1 + "--" + p2 + "--" + p3 + "--" + p4 + "--" + ClassUtil.getKeyAndValue(p5) + "--" + p6.length);
+                    }
+                });
+
+
+        Class<?> abclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.l", xpClassLoader);
+        if (abclass == null) return;
+        Class<?> eclass = XposedHelpers.findClass("com.tencent.mm.network.e", xpClassLoader);
+        Class<?> fclass = XposedHelpers.findClass("com.tencent.mm.ah.f", xpClassLoader);
+        if (eclass == null) return;
+
+        Class<?> bclass = XposedHelpers.findClass("com.tencent.mm.plugin.ae.a.b", xpClassLoader);
+
+        XposedHelpers.findAndHookMethod(bclass, "bTn", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+
+
+                log("DTN执行了！");
+
+            }
+        });
+        XposedHelpers.findAndHookMethod(abclass, "a", eclass, fclass, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+
+
+                Map<String, Object> map1 = new HashMap<String, Object>();
+                log("上传图片参数一.a()" + param.args[0] + "--" + ClassUtil.getKeyAndValue(param.args[0]).toString());
+                log("上传图片参数二.a()" + param.args[0] + "--" + ClassUtil.getKeyAndValue(param.args[1]).toString());
+
+
+            }
+        });
+
+        //
+//        Class<?> pclass = XposedHelpers.findClass("com.tencent.mm.ah.p", xpClassLoader);
+//        Class<?> mClass = XposedHelpers.findClass("com.tencent.mm.ah.m", xpClassLoader);
+//        XposedHelpers.findAndHookMethod(pclass, "a", mClass, int.class, new XC_MethodHook() {
+//            @Override
+//            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//
+//                int p2 = (int) param.args[1];
+//                Map<String, Object> map1 = new HashMap<String, Object>();
+//                Map<String, Object> map = ClassUtil.getKeyAndValue(param.args[0], 5, map1);
+//                XposedBridge.log("监听发送消息.a()--" + map.toString() + "----" + p2);
+//            }
+//        });
+
+//        Class<?> p$5class = XposedHelpers.findClass("com.tencent.mm.ah.p$5", xpClassLoader);
+//        if (p$5class == null) return;
+//        XposedHelpers.findAndHookMethod(p$5class, "run", new XC_MethodHook() {
+//            @Override
+//            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//
+//                XposedBridge.log("p$5class.run方法执行了()---"+param.thisObject.toString());
+//            }
+//        });
+
+
+    }
+    private void listenerimg2() {
+        Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.ui.chatting.SendImgProxyUI", xpClassLoader);
+        if (sclass == null) return;
+
+
+        XposedHelpers.findAndHookMethod(sclass, "a", ArrayList.class, int.class, ArrayList.class, boolean.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                ArrayList<String> paramArrayList = (ArrayList<String>) param.args[0];
+                boolean paramBoolean = (boolean) param.args[3];
+                ArrayList<String> paramArrayList2 = (ArrayList<String>) param.args[2];
+                int paramInt = (int) param.args[1];
+                log("代理list--" + paramArrayList.toString() + "" +
+                        "--" + paramBoolean +
+                        "--" + paramInt +
+                        "--" + paramArrayList2.toString() +
+                        "---" + (param.getResult() == null ? param.getResult() : param.getResult().toString()));
+
+            }
+        });
+
+        XposedHelpers.findAndHookMethod(sclass, "i", ArrayList.class, ArrayList.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                ArrayList<String> paramArrayList = (ArrayList<String>) param.args[0];
+                ArrayList<String> paramArrayList2 = (ArrayList<String>) param.args[1];
+                log("i()--" + paramArrayList.toString() + "" +
+                        "--" + paramArrayList2.toString());
+            }
+        });
+
+        XposedHelpers.findAndHookMethod(sclass, "aFl", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+
+                log("afl()--执行");
+            }
+        });
+
+
+    }
+    private void listenerimg(final XC_LoadPackage.LoadPackageParam lpparam) {
+        Class<?> sclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.n", lpparam.classLoader);
+        Class<?> asiclass = XposedHelpers.findClassIfExists("com.tencent.mm.as.i", lpparam.classLoader);
+
+        if (sclass == null) return;
+
+        XposedHelpers.findAndHookMethod(sclass, "a", ArrayList.class, boolean.class, int.class, int.class, String.class, int.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                ArrayList<String> paramArrayList = (ArrayList<String>) param.args[0];
+                boolean paramBoolean = (boolean) param.args[1];
+                int paramInt1 = (int) param.args[2];
+                int paramInt2 = (int) param.args[3];
+                String paramString = (String) param.args[4];
+                int paramInt3 = (int) param.args[5];
+
+                log("HOOK发送图片--" + paramArrayList.toString() + "" +
+                        "--" + paramBoolean +
+                        "--" + paramInt1 +
+                        "--" + paramInt2 +
+                        "--" + paramString +
+                        "--" + paramInt3);
+
+            }
+
+
+        });
+
+
+        XposedHelpers.findAndHookMethod(asiclass, "a", ArrayList.class, String.class, String.class,
+                ArrayList.class, int.class, boolean.class, int.class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        ArrayList<Integer> paramArrayList = (ArrayList<Integer>) param.args[0];
+                        String paramString = (String) param.args[1];
+                        String paramString2 = (String) param.args[2];
+                        ArrayList<String> paramArrayList2 = (ArrayList<String>) param.args[3];
+                        int paramInt1 = (int) param.args[4];
+                        boolean paramBoolean = (boolean) param.args[5];
+                        int paramInt2 = (int) param.args[6];
+
+
+                        log("我要看看这个方法--" + paramArrayList.toString() + "" +
+                                "--" + paramString +
+                                "--" + paramString2 +
+                                "--" + paramArrayList2.toString() +
+                                "--" + paramInt1 +
+                                "--" + paramBoolean +
+                                "--" + paramInt2
+                        );
+
+                    }
+
+
+                });
+
+        XposedHelpers.findAndHookMethod(sclass, "nH", String.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                String paramString = (String) param.args[0];
+
+                log("nH--" + paramString +
+                        "---" + (param.getResult() == null ? param.getResult() : param.getResult().toString()));
+
+            }
+
+        });
+
+
+    }

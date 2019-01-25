@@ -3,7 +3,7 @@ package cn.lemon.lwr.thread;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import cn.lemon.lwr.MyXposedInit;
+import cn.lemon.lwr.components.msg.WxMessageHandler;
 import cn.lemon.lwr.util.HttpRequest;
 import cn.lemon.lwr.util.StringUtils;
 import de.robv.android.xposed.XposedBridge;
@@ -29,7 +29,7 @@ public class Tuling123 implements Runnable{
             String strResponse = httpRequest.getData();
              String tulingmsg =  strResponse.substring(strResponse.indexOf("text\":\"")+7,strResponse.lastIndexOf("\""));
             if(StringUtils.isNotEmpty(tulingmsg)){
-                MyXposedInit.sendTextMsg(this.talker, tulingmsg);
+               WxMessageHandler.sendTextMsg(this.talker, tulingmsg);
             }else{
                 XposedBridge.log("图灵消息获取失败："+strResponse);
             }

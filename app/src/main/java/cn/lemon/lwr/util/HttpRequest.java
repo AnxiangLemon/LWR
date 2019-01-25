@@ -15,7 +15,6 @@ public final class HttpRequest {
         this.url = url;
     }
 
-
     //get方法获取数据
     public String getData() {
         Response response;

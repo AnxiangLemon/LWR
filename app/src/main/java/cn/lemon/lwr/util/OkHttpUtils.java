@@ -18,7 +18,6 @@ public class OkHttpUtils {
                 .connectTimeout(DEFAULT_CONNECT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)
                 .build();
     }
-
     public static OkHttpUtils getInstance() {
         if (sInstance == null) {
             synchronized (OkHttpUtils.class) {

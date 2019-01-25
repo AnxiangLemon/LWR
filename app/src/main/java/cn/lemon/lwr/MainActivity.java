@@ -50,7 +50,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     //初始化QMUIGroupListView
     private void initMainContentView() {
         AppInfo appInfo = AppInfo.getInstance();

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import java.util.List;
 
 public final class AppUtils {
-
     //获取某个app（微信或XP框架）的安装版本号。未安装，返回空字符串。
     public static String getAppVersionName(Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
@@ -17,7 +16,6 @@ public final class AppUtils {
                 return packageInfo.versionName;
             }
         }
-
         return "";
     }
 

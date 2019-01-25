@@ -57,20 +57,15 @@ public class StringUtils {
     /**
      * 将每三个数字加上逗号处理（通常使用金额方面的编辑）
      *
-     * @param str
-     *            无逗号的数字
-     *
+     * @param str 无逗号的数字
      * @return 加上逗号的数字
      */
     public static String addComma(String str) {
-
         String beforeStr = "";
         String afterStr = "";
-
         if (isEmpty(str)) {
             return "0";
         }
-
         if (str.indexOf(".") != -1) {// 判断传过来的字符串是否含有小数点‘.’,即数字是否为小数
             // 截取小数点以及之后的字符串
             afterStr = str.substring(str.indexOf("."), str.length());
@@ -90,7 +85,6 @@ public class StringUtils {
                 strTemp += reverseStr.substring(i * 3, reverseStr.length());
                 break;
             }
-
             strTemp += reverseStr.substring(i * 3, i * 3 + 3) + ",";
         }
 
@@ -104,22 +98,25 @@ public class StringUtils {
         return resultStr + afterStr;
     }
 
-    /** 获得小时和分钟
+    /**
+     * 获得小时和分钟
+     *
      * @param date: 2016-10-16 20:00:00
      * @return: 20:00
      */
-    public static String getTimeByDate(String date){
-        String hourMinSec=date.split(" ")[1];
-        String[] times=hourMinSec.split(":");
-        return times[0]+":"+times[1];
+    public static String getTimeByDate(String date) {
+        String hourMinSec = date.split(" ")[1];
+        String[] times = hourMinSec.split(":");
+        return times[0] + ":" + times[1];
     }
+
     /**
      * 分钟数转小时：分钟
      *
      * @param min
      * @return
      */
-    public static String minutesToHour(int min){
+    public static String minutesToHour(int min) {
 
         int hour = min / 60;
         int _min = min % 60;
@@ -127,22 +124,26 @@ public class StringUtils {
         return hour + "小时" + _min + "分钟";
     }
 
-    /** 获得几号
+    /**
+     * 获得几号
+     *
      * @param strDate:2016-10-16
      * @return: 16
      */
-    public static String getDayByDate(String strDate){
+    public static String getDayByDate(String strDate) {
         String[] times = strDate.split("-");
         return times[2];
     }
 
-    /** 获得小时
+    /**
+     * 获得小时
+     *
      * @param date:2016-10-16 20:00:00
      * @return: 20
      */
-    public static String getTimeHourByDate(String date){
-        String hourMinSec=date.split(" ")[1];
-        String[] times=hourMinSec.split(":");
+    public static String getTimeHourByDate(String date) {
+        String hourMinSec = date.split(" ")[1];
+        String[] times = hourMinSec.split(":");
         return times[0];
     }
 
@@ -157,10 +158,11 @@ public class StringUtils {
         return strTime;
     }
 
-    /** 将long类型的时间转换成 formatType格式的返回
+    /**
+     * 将long类型的时间转换成 formatType格式的返回
      *
      * @param currentTime:1484450460000
-     *  @param formatType:例如"yyyy-MM-dd HH:mm:ss"
+     * @param formatType:例如"yyyy-MM-dd  HH:mm:ss"
      * @return: 2016-10-16 20:00:00
      */
     public static Date longToDate(long currentTime, String formatType)
@@ -170,6 +172,7 @@ public class StringUtils {
         Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
         return date;
     }
+
     public static String dateToString(Date data, String formatType) {
         return new SimpleDateFormat(formatType).format(data);
     }
@@ -188,7 +191,8 @@ public class StringUtils {
         }
     }
 
-    /** 将String 类型的时间转换成Date格式
+    /**
+     * 将String 类型的时间转换成Date格式
      */
     public static Date stringToDate(String strTime, String formatType)
             throws ParseException {
@@ -197,6 +201,7 @@ public class StringUtils {
         date = formatter.parse(strTime);
         return date;
     }
+
     /**
      * @param date:2016-10-16 20:00:00
      * @return: 1488739827

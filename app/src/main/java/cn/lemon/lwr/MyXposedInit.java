@@ -2,6 +2,11 @@ package cn.lemon.lwr;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
+import android.os.Bundle;
+
+import java.util.Iterator;
+import java.util.Set;
 
 import cn.lemon.lwr.components.WxHook;
 import cn.lemon.lwr.components.data.WxDataBaseHandler;
@@ -85,7 +90,34 @@ public class MyXposedInit implements IXposedHookLoadPackage {
         //获取收款二维码链接 这个不知道用的多不多
         WxGatheringQRCode.hookPayUrl();
         hookWxCheckXp();
+        hookDatabasePWD();
+
     }
+
+
+
+    //得到数据库密码
+    private void hookDatabasePWD() {
+
+        Class<?> sqlClass = XposedHelpers.findClassIfExists("com.tencent.wcdb.database.SQLiteDatabase", WxHook.wxClassLoader);
+        Class<?> SpecClass = XposedHelpers.findClassIfExists("com.tencent.wcdb.database.SQLiteCipherSpec", WxHook.wxClassLoader);
+        if (sqlClass == null) {
+            return;
+        } else {
+
+            XposedHelpers.findAndHookMethod(sqlClass, "open", byte[].class, SpecClass, int.class, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                    byte[] bArr = (byte[]) param.args[0];
+
+                    log("微信数据库密码："+new String(bArr));
+                }
+            });
+
+
+        }
+    }
+
 
 
     //接收消息
